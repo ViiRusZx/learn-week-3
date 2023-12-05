@@ -187,6 +187,104 @@ def print_salary_stats() -> None:
         print(f"отдел: {k} мин зп: {v['min_s']}, ср зп: {v['avg_s']}, макс зп: {v['max_s']}")
 
 
+def average_salary(lst: list) -> float:
+    count = 0
+    count1 = 0
+    avg_count = 0
+    for departmen in departments:
+        name = departmen['employers']
+        for i in name:
+            count += i['salary_rub']
+            count1 += 1
+            avg_count = count / count1
+    return avg_count
+
+
+def post_salary(lst: list) -> list:
+    prof = []
+    for dep in departments:
+        name = dep['employers']
+        for i in name:
+            if i['salary_rub'] > 90000:
+                prof.append(i['position'])
+    return prof
+
+
+def print_post_salary() -> None:
+    for i in post_salary(departments):
+        print(i)
+
+
+def calculate_avg_salary(lst: list) -> dict:
+    avg_salary_dict = {}
+
+    for department in departments:
+        name = department['title']
+        total_salary = 0
+        count = 0
+        for employee in department['employers']:
+            first_name = employee['first_name']
+            if first_name in ["Michelle", "Nicole", "Christina", "Caitlin"]:
+                total_salary += employee['salary_rub']
+                count += 1
+        if count > 0:
+            avg_salary = total_salary / count
+            avg_salary_dict[name] = avg_salary
+    return avg_salary_dict
+
+
+def print_avg_salary_girls() -> None:
+    for k, v in calculate_avg_salary(departments).items():
+        print(f"Отдел: {k}, средняя зп девушек: {v}")
+
+
+def last_letter(lst: list) -> set[str | int]:
+    new_set = set()
+    x = 'aoeiuy'
+    for dep in departments:
+        name = dep['employers']
+        for i in name:
+            first_name = i['first_name']
+            for j in x:
+                if j in first_name[-1]:
+                    new_set.add(first_name)
+    return new_set
+
+
+def print_set() -> None:
+    for i in last_letter(departments):
+        print(i)
+
+
+def calculate_average_tax(lst: list, list: list) -> dict:
+    department_tax = {}
+
+    for dep in departments:
+        name = dep['title']
+        total_salary = 0
+        total_tax = 0
+        num_employees = 0
+
+        for employer in dep['employers']:
+            for tax in taxes:
+                if tax['department'] is None or tax['department'] == name:
+                    tax_amount = (employer['salary_rub'] * tax['value_percents']) / 100
+                    total_tax += tax_amount
+
+            total_salary += employer['salary_rub']
+            num_employees += 1
+
+        average_tax_per_employee = total_tax / num_employees if num_employees > 0 else 0
+        department_tax[name] = average_tax_per_employee
+
+    return department_tax
+
+
+def prin_average_tax() -> None:
+    for k, v in calculate_average_tax(departments, taxes).items():
+        print(f"Отдел: {k} - средний налог: {v}")
+
+
 def main():
     print(f'Название всех отделов: ')
     print_dep_name(whitch_dep(departments))
@@ -218,6 +316,25 @@ def main():
 
     print(f"Отделы с указанием минимальной средней и максимальной зп: ")
     print_salary_stats()
+    print(f"\n")
+
+    print(f"Средняя за по всей фирме: {average_salary(departments)}")
+    print(f"\n")
+
+    print(f"Названия должностей которые получают больше 90к: ")
+    print_post_salary()
+    print(f"\n")
+
+    print(f"Средняя зп по отделам среди девушек: ")
+    print_avg_salary_girls()
+    print(f"\n")
+
+    print(f"Имена людей которые заканчиваются на гласную: ")
+    print_set()
+    print(f"\n")
+
+    print(f"Отделы со средним налогом на сотрудников этого отдела: ")
+    prin_average_tax()
     print(f"\n")
 
 
