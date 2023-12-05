@@ -144,6 +144,49 @@ def ggg(dic: dict) -> None:
         print(dp, zp)
 
 
+def min_salary_in(lst: list) -> dict:
+    min_dict = {}
+    for department in departments:
+        min_salary = []
+        depart_name = department['title']
+        for salary in department['employers']:
+            min_salary.append(salary['salary_rub'])
+        minimum_salary = min(min_salary)
+        min_dict[depart_name] = minimum_salary
+    return min_dict
+
+
+def print_min() -> None:
+    for k, v in min_salary_in(departments).items():
+        print(f"Минимальная зарплата в отделе {k} = {v}")
+
+
+def all_types_sol(lst: list) -> dict:
+    new_solary = {}
+
+    for department in departments:
+        name_depart = department['title']
+        employers = department['employers']
+        salaries = []
+        for emploer in employers:
+            salaries.append(emploer['salary_rub'])
+            min_salary = min(salaries)
+            avg_salary = sum(salaries) / len(salaries)
+            max_salary = max(salaries)
+            new_solary[name_depart] = {
+                "min_s": min_salary,
+                "avg_s": avg_salary,
+                "max_s": max_salary
+            }
+
+    return new_solary
+
+
+def print_salary_stats() -> None:
+    for k, v in all_types_sol(departments).items():
+        print(f"отдел: {k} мин зп: {v['min_s']}, ср зп: {v['avg_s']}, макс зп: {v['max_s']}")
+
+
 def main():
     print(f'Название всех отделов: ')
     print_dep_name(whitch_dep(departments))
@@ -167,6 +210,15 @@ def main():
 
     print(f"сколько тратится на один отдел: ")
     ggg(sum_per_mounth(departments))
+    print(f"\n")
+
+    print(f"Отделы с указанием минимальной зарплаты: ")
+    print_min()
+    print(f"\n")
+
+    print(f"Отделы с указанием минимальной средней и максимальной зп: ")
+    print_salary_stats()
+    print(f"\n")
 
 
 if __name__ == '__main__':
